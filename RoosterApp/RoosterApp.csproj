@@ -152,6 +152,9 @@
     <None Include="Properties\PublishProfiles\deploy dev.pubxml" />
     <None Include="Properties\PublishProfiles\deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Images\hartbeat.png" />
+    <Content Include="Images\hartbeat_green.png" />
+    <Content Include="Images\hartbeat_red.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
