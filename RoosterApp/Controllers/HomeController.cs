@@ -16,5 +16,11 @@ namespace RoosterApp.Controllers
             return View();
         }
 
+        public ActionResult Status()
+        {
+
+            return View();
+        }
+
     }
 }

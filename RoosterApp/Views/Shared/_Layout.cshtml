@@ -7,8 +7,12 @@
     <link runat="server" rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
     <link runat="server" rel="icon" href="../../favicon.ico" type="image/ico" />-->
     <meta name="viewport" content="width=device-width" />
+    <script src="~/Scripts/jquery-1.9.0.js"></script>
+    <script src="~/Scripts/raphael.2.1.0.min.js"></script>
+    <script src="~/Scripts/justgage.1.0.1.min.js"></script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
     <body>
         
@@ -28,7 +32,7 @@
                         <li><a href="">link</a></li>
                         <li><a href="">link</a></li>
                         <li><a href="">link</a></li>
-                        <li><a href="">Status</a></li>
+                        <li>@Html.ActionLink("Status", "Status", "Home")</li>
                     </ul>
                 </div>
             </div>
