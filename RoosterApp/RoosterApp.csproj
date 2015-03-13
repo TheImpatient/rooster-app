@@ -137,6 +137,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\StatusImgModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +153,12 @@
     <None Include="Properties\PublishProfiles\deploy dev.pubxml" />
     <None Include="Properties\PublishProfiles\deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
-    <Content Include="Images\hartbeat.png" />
-    <Content Include="Images\hartbeat_green.png" />
-    <Content Include="Images\hartbeat_red.png" />
+    <Content Include="Images\heartbeat.png" />
+    <Content Include="Images\heartbeat2.png" />
+    <Content Include="Images\heartbeat_green.png" />
+    <Content Include="Images\heartbeat_green2.png" />
+    <Content Include="Images\heartbeat_red.png" />
+    <Content Include="Images\heartbeat_red2.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
@@ -196,10 +200,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Status.cshtml" />
+    <Content Include="Views\Shared\_StatusImgPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,18 +1,30 @@
-﻿@{
+﻿@model IEnumerable<RoosterApp.Models.StatusImgModel>
+@{
     ViewBag.Title = "Status";
 }
 <div>
     <h2>Status</h2>
-    <img src="~/Images/hartbeat.png" style="width:90px;"/>
+    <div id="statusImgContainer" style="width: 90px;height: 90px;background-color: #00a9ec">
+        @Html.Partial("_StatusImgPartial", Model.FirstOrDefault())        
+    </div>
 </div>
 
 <div id="gauge" class="200x160px"></div>
 <script>
-  var g = new JustGage({
-    id: "gauge",
-    value: 67,
-    min: 0,
-    max: 100,
-    title: "Visitors"
-  });
+    var g = new JustGage({
+        id: "gauge",
+        value: 67,
+        min: 0,
+        max: 100,
+        title: "Visitors"
+    });
 </script>
+
+<script type="text/javascript">
+
+    $(function () {
+        setInterval(function () { $('#statusImgContainer').load('StatusImgPartialView').fadeIn("slow"); }, 5000); // every 3 sec
+    });
+
+</script>
+
