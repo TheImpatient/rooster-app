@@ -1,29 +1,106 @@
-﻿@model IEnumerable<RoosterApp.Models.StatusImgModel>
+﻿@model IEnumerable<RoosterApp.Models.StatusImg>
 @{
     ViewBag.Title = "Status";
 }
-<div>
-    <h2>Status</h2>
-    <div id="statusImgContainer" style="width: 90px;height: 90px;background-color: #00a9ec">
-        @Html.Partial("_StatusImgPartial", Model.FirstOrDefault())        
-    </div>
+<table style="width: 100%; margin-bottom: 30px" >
+    <tr>
+        <td>
+            <h2>Status</h2>
+        </td>
+    </tr>
+    <tr style="width: 100%">
+        <td style="width: 25%">
+            <div id="statusImgContainer" style="width: 90px;height: 90px;background-color: #00a9ec">
+                @Html.Partial("_StatusImgPartial", Model.FirstOrDefault())
+            </div>
+        </td>
+        <td style="width: 25%">
+            <div id="errorsPer24UurGauge" class="200x160px"></div>
+        </td>
+        <td style="width: 25%">
+            <div id="roostersPerUurGauge" class="200x160px"></div>
+        </td>
+        <td style="width: 25%">
+            <div id="GemiddeldeCrawlTijdGauge" class="200x160px"></div>
+        </td>
+    </tr>
+</table>
+
+<div class="list-card">
+    <h3 style="margin-top: 0px;margin-bottom: 20px">History<img style="margin-left: 20px;" id="testgif" src="../../Images/ajax-loader.gif" /></h3>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Klas</th>
+                <th>Week</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="statusHistoryContainer">
+            @Html.Partial("_StatusHistoryPartial")
+        </tbody>
+    </table>
+
 </div>
 
-<div id="gauge" class="200x160px"></div>
+<div class="list-card">
+    <h3 style="margin-top: 0px;margin-bottom: 20px">Errors<img style="margin-left: 20px;" id="testgif" src="../../Images/ajax-loader.gif" /></h3>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Klas</th>
+                <th>Week</th>
+                <th>Error</th>
+            </tr>
+        </thead>
+        <tbody id="statusErrorsContainer">
+            @Html.Partial("_StatusErrorsPartial")
+        </tbody>
+    </table>
+    
+</div>
+
+
 <script>
     var g = new JustGage({
-        id: "gauge",
-        value: 67,
+        id: "roostersPerUurGauge",
+        value: 90,
         min: 0,
         max: 100,
-        title: "Visitors"
+        title: "Roosters per uur",
+        label: "roosters"
+    });
+
+    var h = new JustGage({
+        id: "errorsPer24UurGauge",
+        value: 5,
+        min: 0,
+        max: 100,
+        title: "Errors laatste 24 uur",
+        label: "errors"
+    });
+
+    var i = new JustGage({
+        id: "GemiddeldeCrawlTijdGauge",
+        value: 256,
+        min: 0,
+        max: 5000,
+        title: "Gemiddelde crawl tijd laatste 24 uur",
+        label: "milliseconds"
     });
 </script>
 
 <script type="text/javascript">
 
     $(function () {
-        setInterval(function () { $('#statusImgContainer').load('StatusImgPartialView').fadeIn("slow"); }, 5000); // every 3 sec
+        setInterval(function() {
+            $('#statusImgContainer').load('StatusImgPartialView').fadeIn("slow");
+            $('#statusHistoryContainer').load('StatusHistoryPartialView').fadeIn("slow");
+            $('#statusErrorsContainer').load('StatusErrorsPartialView').fadeIn("slow");
+            
+        }, 5000); // every 3 sec
     });
 
 </script>

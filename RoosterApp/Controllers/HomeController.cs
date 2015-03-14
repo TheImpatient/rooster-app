@@ -19,21 +19,34 @@ namespace RoosterApp.Controllers
 
         public ActionResult Status()
         {
-            IEnumerable<StatusImgModel> list = Repository.GetData();
+            IEnumerable<StatusImg> list = Repository.GetStatusImgData();
             return View(list);
         }
 
         public PartialViewResult StatusImgPartialView()
         {
-            IEnumerable<StatusImgModel> list = Repository.GetData();
+            IEnumerable<StatusImg> list = Repository.GetStatusImgData();
 
             int min = list.Min(m => m.ID);
             int max = list.Max(m => m.ID);
 
             int randomId = new Random().Next(min, (max + 1));
 
-            StatusImgModel model = list.FirstOrDefault(m => m.ID == randomId);
+            StatusImg model = list.FirstOrDefault(m => m.ID == randomId);
             return PartialView("_StatusImgPartial", model);
+        }
+
+        public PartialViewResult StatusHistoryPartialView()
+        {
+            List<StatusLog> list = Repository.GetStatusLogData();
+
+            return PartialView("_StatusHistoryPartial", list);
+        }
+
+        public PartialViewResult StatusErrorsPartialView()
+        {
+            
+            return PartialView("_StatusErrorsPartial");
         }
 
     }

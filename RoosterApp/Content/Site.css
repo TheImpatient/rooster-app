@@ -70,3 +70,24 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+
+.list-card {
+    position: relative;
+    border-width: 1px;
+    border-color: #ddd;
+    border-style: solid;
+    border-radius: 4px;
+    padding: 30px 15px 45px;
+    margin-bottom: 20px;
+}
+
+.list-card:after {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
