@@ -1,9 +1,21 @@
-﻿@{
+﻿@model List<RoosterApp.Models.StatusLog>
+@{
     ViewBag.Title = "_StatusHistoryPartial";
+    
 }
 
-@if (false)
+@if (Model.Any())
 {
+    foreach (var statusLog in Model)
+    {
+        <tr>
+            <td>@statusLog.TaskId</td>
+            <td>@statusLog.Timestamp</td>
+            <td>@statusLog.Klas</td>
+            <td>@statusLog.Week</td>
+            <td>@statusLog.Completed</td>
+        </tr>
+    }
 }
 else
 {

@@ -49,13 +49,16 @@ namespace RoosterApp.Models
                 connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string query = string.Format("SELECT details FROM schedule_log WHERE timestamp > '{0}';",DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"));
+                string query = string.Format("SELECT timestamp , details FROM schedule_log WHERE timestamp > '{0}';",DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"));
                 var sqlCommand = new MySqlCommand(query, connection);
                 reader = sqlCommand.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    list.Add((StatusLog)jss.Deserialize<StatusLog>((string)reader.GetValue(0)));
+                    var item = jss.Deserialize<StatusLog>((string) reader.GetValue(1));
+                    item.Timestamp = (DateTime) reader.GetValue(0);
+
+                    list.Add(item);
                 }
             }
             catch (MySqlException err)

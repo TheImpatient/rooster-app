@@ -14,5 +14,6 @@ namespace RoosterApp.Models
         public string Exception { get; set; }
         public Log.DataAction Action { get; set; }
         public TimeSpan Duration { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 }

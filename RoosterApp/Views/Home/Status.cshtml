@@ -1,6 +1,9 @@
-﻿@model IEnumerable<RoosterApp.Models.StatusImg>
-@{
+﻿@{
     ViewBag.Title = "Status";
+    List<RoosterApp.Models.StatusImg> statusImg = ViewBag.StatusImg;
+    List<RoosterApp.Models.StatusLog> statusLog = ViewBag.StatusLog;
+    int errorGaugeValue = ViewBag.ErrorGauge;
+    int roostersPerUur = ViewBag.RoostersPerUur;
 }
 <table style="width: 100%; margin-bottom: 30px" >
     <tr>
@@ -11,7 +14,7 @@
     <tr style="width: 100%">
         <td style="width: 25%">
             <div id="statusImgContainer" style="width: 90px;height: 90px;background-color: #00a9ec">
-                @Html.Partial("_StatusImgPartial", Model.FirstOrDefault())
+                @Html.Partial("_StatusImgPartial", statusImg.FirstOrDefault())
             </div>
         </td>
         <td style="width: 25%">
@@ -27,36 +30,38 @@
 </table>
 
 <div class="list-card">
-    <h3 style="margin-top: 0px;margin-bottom: 20px">History<img style="margin-left: 20px;" id="testgif" src="../../Images/ajax-loader.gif" /></h3>
+    <h3 style="margin-top: 0px;margin-bottom: 20px">History<img style="margin-left: 20px;" id="statusHistoryLoader" src="../../Images/ajax-loader.gif" /></h3>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Task</th>
+                <th>Timestamp</th>
                 <th>Klas</th>
                 <th>Week</th>
-                <th>Status</th>
+                <th>Completed</th>
             </tr>
         </thead>
         <tbody id="statusHistoryContainer">
-            @Html.Partial("_StatusHistoryPartial")
+            @Html.Partial("_StatusHistoryPartial", statusLog.Skip((statusLog.Count - 10)).ToList())
         </tbody>
     </table>
 
 </div>
 
 <div class="list-card">
-    <h3 style="margin-top: 0px;margin-bottom: 20px">Errors<img style="margin-left: 20px;" id="testgif" src="../../Images/ajax-loader.gif" /></h3>
+    <h3 style="margin-top: 0px;margin-bottom: 20px">Errors<img style="margin-left: 20px;" id="statusErrorLoader" src="../../Images/ajax-loader.gif" /></h3>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Task</th>
+                <th>Timestamp</th>
                 <th>Klas</th>
                 <th>Week</th>
                 <th>Error</th>
             </tr>
         </thead>
         <tbody id="statusErrorsContainer">
-            @Html.Partial("_StatusErrorsPartial")
+            @Html.Partial("_StatusErrorsPartial", statusLog.Where(x=>x.Completed==false).ToList())
         </tbody>
     </table>
     
@@ -64,25 +69,25 @@
 
 
 <script>
-    var g = new JustGage({
+    var roosterGauge = new JustGage({
         id: "roostersPerUurGauge",
-        value: 90,
+        value: @roostersPerUur,
         min: 0,
         max: 100,
         title: "Roosters per uur",
         label: "roosters"
     });
 
-    var h = new JustGage({
+    var errorGauge = new JustGage({
         id: "errorsPer24UurGauge",
-        value: 5,
+        value: @errorGaugeValue,
         min: 0,
         max: 100,
         title: "Errors laatste 24 uur",
         label: "errors"
     });
 
-    var i = new JustGage({
+    var crawlTijdGauge = new JustGage({
         id: "GemiddeldeCrawlTijdGauge",
         value: 256,
         min: 0,
@@ -93,14 +98,27 @@
 </script>
 
 <script type="text/javascript">
+    $("#statusHistoryLoader").show(1).delay(3 * 1000).hide(1);
+    $("#statusErrorLoader").show(1).delay(3 * 1000).hide(1);
 
     $(function () {
-        setInterval(function() {
+        setInterval(function () {
+
+            $("#statusHistoryLoader").show(1).delay(3 * 1000).hide(1);
+            $("#statusErrorLoader").show(1).delay(3 * 1000).hide(1);
+
             $('#statusImgContainer').load('StatusImgPartialView').fadeIn("slow");
             $('#statusHistoryContainer').load('StatusHistoryPartialView').fadeIn("slow");
             $('#statusErrorsContainer').load('StatusErrorsPartialView').fadeIn("slow");
-            
-        }, 5000); // every 3 sec
+
+            $.getJSON('/Home/ErrorGaugeResult').done(function(data) {
+                errorGauge.refresh(data);
+            });
+            $.getJSON('/Home/RoosterGaugeResult').done(function(data) {
+                roosterGauge.refresh(data);
+            });
+
+        }, 10000); // every 10 sec
     });
 
 </script>

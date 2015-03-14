@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using RoosterApp.Models;
 
 namespace RoosterApp.Controllers
@@ -19,8 +20,15 @@ namespace RoosterApp.Controllers
 
         public ActionResult Status()
         {
-            IEnumerable<StatusImg> list = Repository.GetStatusImgData();
-            return View(list);
+            IEnumerable<StatusImg> imgs = Repository.GetStatusImgData();
+            List<StatusLog> logs = Repository.GetStatusLogData();
+
+            ViewBag.RoostersPerUur = logs.Count(x => x.Timestamp > DateTime.Now.AddHours(-1));
+            ViewBag.ErrorGauge = logs.Count(x => x.Timestamp > DateTime.Now.AddDays(-1) && x.Completed == false);
+            ViewBag.StatusImg = imgs;
+            ViewBag.StatusLog = logs;
+
+            return View();
         }
 
         public PartialViewResult StatusImgPartialView()
@@ -40,13 +48,28 @@ namespace RoosterApp.Controllers
         {
             List<StatusLog> list = Repository.GetStatusLogData();
 
-            return PartialView("_StatusHistoryPartial", list);
+            return PartialView("_StatusHistoryPartial", list.Skip((list.Count-10)).ToList());
         }
 
         public PartialViewResult StatusErrorsPartialView()
         {
-            
-            return PartialView("_StatusErrorsPartial");
+            List<StatusLog> list = Repository.GetStatusLogData();
+
+            return PartialView("_StatusErrorsPartial", list.Where(x => x.Completed == false).ToList());
+        }
+
+        public int ErrorGaugeResult()
+        {
+            List<StatusLog> list = Repository.GetStatusLogData();
+
+            return list.Count(x => x.Timestamp > DateTime.Now.AddDays(-1) && x.Completed == false);
+        }
+
+        public int RoosterGaugeResult()
+        {
+            List<StatusLog> list = Repository.GetStatusLogData();
+
+            return list.Count(x => x.Timestamp > DateTime.Now.AddHours(-1));
         }
 
     }

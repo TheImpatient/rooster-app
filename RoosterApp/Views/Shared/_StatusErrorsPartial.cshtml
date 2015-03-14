@@ -1,9 +1,17 @@
-﻿@{
-    ViewBag.Title = "_StatusErrorsPartial";
-}
+﻿@model List<RoosterApp.Models.StatusLog>
 
-@if (false)
+@if (Model.Any())
 {
+    foreach (var statusLog in Model)
+    {
+        <tr>
+            <td>@statusLog.TaskId</td>
+            <td>@statusLog.Timestamp</td>
+            <td>@statusLog.Klas</td>
+            <td>@statusLog.Week</td>
+            <td>@statusLog.Exception</td>
+        </tr>
+    }
 }
 else
 {
