@@ -20,12 +20,13 @@ namespace RoosterApp.Controllers
 
         public ActionResult Status()
         {
-            IEnumerable<StatusImg> imgs = Repository.GetStatusImgData();
+            StatusImg img = Repository.GetStatusImgData();
             List<StatusLog> logs = Repository.GetStatusLogData();
 
             ViewBag.RoostersPerUur = logs.Count(x => x.Timestamp > DateTime.Now.AddHours(-1));
             ViewBag.ErrorGauge = logs.Count(x => x.Timestamp > DateTime.Now.AddDays(-1) && x.Completed == false);
-            ViewBag.StatusImg = imgs;
+            ViewBag.CrawlTijdGauge = (int)logs.Average(x => x.Duration);
+            ViewBag.StatusImg = img;
             ViewBag.StatusLog = logs;
 
             return View();
@@ -33,15 +34,25 @@ namespace RoosterApp.Controllers
 
         public PartialViewResult StatusImgPartialView()
         {
-            IEnumerable<StatusImg> list = Repository.GetStatusImgData();
+            StatusImg img = Repository.GetStatusImgData();
 
-            int min = list.Min(m => m.ID);
-            int max = list.Max(m => m.ID);
+            if (img != null)
+            {
+                if (img.Timestamp.CompareTo(DateTime.Now.AddSeconds(-10)) == 1)
+                {
+                    img.Url = "../../images/heartbeat_green2.png";
+                }
+                else
+                {
+                    img.Url = "../../images/heartbeat_red2.png";
+                }
+            }
+            else
+            {
+                img.Url = "../../images/heartbeat2.png";
+            }
 
-            int randomId = new Random().Next(min, (max + 1));
-
-            StatusImg model = list.FirstOrDefault(m => m.ID == randomId);
-            return PartialView("_StatusImgPartial", model);
+            return PartialView("_StatusImgPartial", img);
         }
 
         public PartialViewResult StatusHistoryPartialView()
@@ -70,6 +81,12 @@ namespace RoosterApp.Controllers
             List<StatusLog> list = Repository.GetStatusLogData();
 
             return list.Count(x => x.Timestamp > DateTime.Now.AddHours(-1));
+        }
+
+        public int CrawlTijdGaugeResult()
+        {
+            List<StatusLog> list = Repository.GetStatusLogData();
+            return (int) list.Average(x=>x.Duration);
         }
 
     }

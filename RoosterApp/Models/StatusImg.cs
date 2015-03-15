@@ -8,8 +8,10 @@ namespace RoosterApp.Models
     public class StatusImg
     {
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public DateTime Timestamp { get; set; }
+        public bool Running { get; set; }
+
+        public string Url { get; set; }
     }
 
     

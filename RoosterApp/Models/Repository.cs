@@ -10,31 +10,44 @@ namespace RoosterApp.Models
 {
     public class Repository
     {
-        public static List<StatusImg> GetStatusImgData()
+        public static StatusImg GetStatusImgData()
         {
-            var list = new List<StatusImg>
+            const string connectionString = @"Server=195.8.208.128;Port=3351;Database=rooster;Uid=app;Pwd=&O6zWYLUEIg9lNhxXdzy;";
+            MySqlConnection connection = null;
+            MySqlDataReader reader = null;
+            var img = new StatusImg();
+            try
             {
-                new StatusImg
-                {
-                    ID = 1,
-                    Name = "default",
-                    ImageUrl = "../../Images/heartbeat2.png"
-                },
-                new StatusImg
-                {
-                    ID = 2,
-                    Name = "Online",
-                    ImageUrl = "../../Images/heartbeat_green2.png"
-                },
-                new StatusImg
-                {
-                    ID = 3,
-                    Name = "Offline",
-                    ImageUrl = "../../Images/heartbeat_red2.png"
-                }
-            };
+                connection = new MySqlConnection(connectionString);
+                connection.Open();
 
-            return list;
+                string query = string.Format("SELECT * FROM heartbeat;");
+                var sqlCommand = new MySqlCommand(query, connection);
+                reader = sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    img.ID = (int) reader.GetValue(0);
+                    img.Timestamp = (DateTime) reader.GetValue(1);
+                    img.Running = ((int) reader.GetValue(2)) == 1 ? true : false;
+                }
+            }
+            catch (MySqlException err)
+            {
+                Console.WriteLine("Error: " + err.ToString());
+            }
+            finally
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+                if (connection != null)
+                {
+                    connection.Close();
+                }
+            }
+            return img;
         }
 
         public static List<StatusLog> GetStatusLogData()

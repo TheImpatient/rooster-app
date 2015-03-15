@@ -1,9 +1,12 @@
 ﻿@{
     ViewBag.Title = "Status";
-    List<RoosterApp.Models.StatusImg> statusImg = ViewBag.StatusImg;
+    RoosterApp.Models.StatusImg statusImg = ViewBag.StatusImg;
+    statusImg.Url = "../../images/heartbeat2.png";
+        
     List<RoosterApp.Models.StatusLog> statusLog = ViewBag.StatusLog;
     int errorGaugeValue = ViewBag.ErrorGauge;
     int roostersPerUur = ViewBag.RoostersPerUur;
+    int crawlTijdGaugeValue = ViewBag.CrawlTijdGauge;
 }
 <table style="width: 100%; margin-bottom: 30px" >
     <tr>
@@ -14,7 +17,7 @@
     <tr style="width: 100%">
         <td style="width: 25%">
             <div id="statusImgContainer" style="width: 90px;height: 90px;background-color: #00a9ec">
-                @Html.Partial("_StatusImgPartial", statusImg.FirstOrDefault())
+                @Html.Partial("_StatusImgPartial", statusImg)
             </div>
         </td>
         <td style="width: 25%">
@@ -89,7 +92,7 @@
 
     var crawlTijdGauge = new JustGage({
         id: "GemiddeldeCrawlTijdGauge",
-        value: 256,
+        value: @crawlTijdGaugeValue,
         min: 0,
         max: 5000,
         title: "Gemiddelde crawl tijd laatste 24 uur",
@@ -116,6 +119,10 @@
             });
             $.getJSON('/Home/RoosterGaugeResult').done(function(data) {
                 roosterGauge.refresh(data);
+            });
+
+            $.getJSON('/Home/CrawlTijdGaugeResult').done(function(data) {
+                crawlTijdGauge.refresh(data);
             });
 
         }, 10000); // every 10 sec
