@@ -34,7 +34,7 @@
 
 <div class="list-card">
     <h3 style="margin-top: 0px;margin-bottom: 20px">History<img style="margin-left: 20px;" id="statusHistoryLoader" src="../../Images/ajax-loader.gif" /></h3>
-    <table class="table table-hover">
+    <table class="table table-hover" id="historyTable">
         <thead>
             <tr>
                 <th>Task</th>
@@ -53,7 +53,7 @@
 
 <div class="list-card">
     <h3 style="margin-top: 0px;margin-bottom: 20px">Errors<img style="margin-left: 20px;" id="statusErrorLoader" src="../../Images/ajax-loader.gif" /></h3>
-    <table class="table table-hover">
+    <table class="table table-hover" id="errorTable">
         <thead>
             <tr>
                 <th>Task</th>
@@ -66,8 +66,54 @@
         <tbody id="statusErrorsContainer">
             @Html.Partial("_StatusErrorsPartial", statusLog.Where(x=>x.Completed==false).ToList())
         </tbody>
-    </table>
-    
+    </table>   
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Status</h4>
+            </div>
+            <div class="modal-body">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Task ID</td>
+                        <td id="taskIdDetails" style="width: 25%"></td>
+                        <td style="width: 20%;font-weight: bold">Timestamp</td>
+                        <td id="timestampDetails" style="width: 25%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Klas</td>
+                        <td id="klasDetails" style="width: 25%"></td>
+                        <td style="width: 20%;font-weight: bold">Week</td>
+                        <td id="weekDetails" style="width: 25%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Completed</td>
+                        <td id="completedDetails" style="width: 25%"></td>
+                        <td style="width: 20%;font-weight: bold">Action</td>
+                        <td id="actionDetails" style="width: 25%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Duration</td>
+                        <td id="durationDetails" style="width: 25%"></td>
+                    </tr>
+                    <tr id="exceptionDetailsContainer">
+                        <td style="width: 20%;font-weight: bold;vertical-align: top">Exception</td>                        
+                    </tr>
+                    <tr id="exceptionDetailsContainer">
+                        <td id="exceptionDetails" colspan="4" style="white-space: pre-wrap"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -98,6 +144,38 @@
         title: "Gemiddelde crawl tijd laatste 24 uur",
         label: "milliseconds"
     });
+    
+    function bindTable()
+    {
+        $('.table > tbody > tr').click(function (e)
+        {
+            if (e.currentTarget.dataset.clickable == "true")
+            {
+                $("#taskIdDetails").text(e.currentTarget.dataset.taskid);
+                $("#timestampDetails").text(e.currentTarget.dataset.timestamp);
+                $("#klasDetails").text(e.currentTarget.dataset.klas);
+                $("#weekDetails").text(e.currentTarget.dataset.week);
+                $("#completedDetails").text(e.currentTarget.dataset.completed);
+                $("#durationDetails").text(e.currentTarget.dataset.duration);
+                $("#actionDetails").text(e.currentTarget.dataset.action);
+       
+                if (e.currentTarget.dataset.action == "Exception" || e.currentTarget.dataset.exception != "" || e.currentTarget.dataset.completed == "False") {
+                    $("#exceptionDetailsContainer").css("visibility", "visible");
+                    $("#exceptionDetails").text(e.currentTarget.dataset.exception);
+                } else {
+                    $("#exceptionDetailsContainer").css("visibility", "hidden");
+                    $("#exceptionDetails").text("");
+                }
+
+
+                $('#infoModal').modal({
+                    show: true
+                });
+            }
+        });
+    }
+
+    bindTable();
 </script>
 
 <script type="text/javascript">

@@ -1,14 +1,10 @@
 ﻿@model List<RoosterApp.Models.StatusLog>
-@{
-    ViewBag.Title = "_StatusHistoryPartial";
-    
-}
 
 @if (Model.Any())
 {
     foreach (var statusLog in Model)
     {
-        <tr>
+        <tr data-clickable=true data-taskid="@statusLog.TaskId" data-timestamp="@statusLog.Timestamp" data-klas="@statusLog.Klas" data-week="@statusLog.Week" data-completed="@statusLog.Completed" data-duration="@statusLog.Duration" data-action="@statusLog.Action" data-exception="@statusLog.Exception">
             <td>@statusLog.TaskId</td>
             <td>@statusLog.Timestamp</td>
             <td>@statusLog.Klas</td>
@@ -25,3 +21,7 @@ else
         </td>
     </tr>
 }
+
+<script>
+    bindTable();
+</script>
