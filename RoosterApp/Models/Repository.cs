@@ -62,7 +62,7 @@ namespace RoosterApp.Models
                 connection = new MySqlConnection(connectionString);
                 connection.Open();
 
-                string query = string.Format("SELECT timestamp , details FROM schedule_log WHERE timestamp > '{0}';",DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"));
+                string query = string.Format("SELECT timestamp , details FROM schedule_log WHERE timestamp > '{0}' ORDER BY  timestamp DESC;", DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd"));
                 var sqlCommand = new MySqlCommand(query, connection);
                 reader = sqlCommand.ExecuteReader();
 

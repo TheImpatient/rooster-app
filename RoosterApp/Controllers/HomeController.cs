@@ -62,7 +62,7 @@ namespace RoosterApp.Controllers
         {
             List<StatusLog> list = Repository.GetStatusLogData();
 
-            return PartialView("_StatusHistoryPartial", list.Skip((list.Count-10)).ToList());
+            return PartialView("_StatusHistoryPartial", list.OrderByDescending(x => x.Timestamp).Take(10).ToList());
         }
 
         public PartialViewResult StatusErrorsPartialView()

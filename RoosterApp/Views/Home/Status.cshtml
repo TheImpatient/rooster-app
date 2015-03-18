@@ -45,7 +45,7 @@
             </tr>
         </thead>
         <tbody id="statusHistoryContainer">
-            @Html.Partial("_StatusHistoryPartial", statusLog.Skip((statusLog.Count - 10)).ToList())
+            @Html.Partial("_StatusHistoryPartial", statusLog.OrderByDescending(x=>x.Timestamp).Take(10).ToList())
         </tbody>
     </table>
 
