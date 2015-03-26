@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using RoosterApp.Models;
 
 namespace RoosterApp.Controllers
@@ -12,8 +13,9 @@ namespace RoosterApp.Controllers
         //
         // GET: /Search/
 
-        public ActionResult Index(string sortOrder, string searchString)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
             ViewBag.VakSortParm = String.IsNullOrEmpty(sortOrder) ? "vak_desc" : "";
             ViewBag.KlasSortParm = sortOrder == "Klas" ? "klas_desc" : "Klas";
             ViewBag.DocentSortParm = sortOrder == "Docent" ? "docent_desc" : "Docent";
@@ -21,8 +23,20 @@ namespace RoosterApp.Controllers
             ViewBag.AanvangSortParm = sortOrder == "Aanvang" ? "aanvang_desc" : "Aanvang";
             ViewBag.DuurSortParm = sortOrder == "Duur" ? "duur_desc" : "Duur";
 
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+
             //todo get rooster data once, look for solution in datamining project
-            var rooster = Repository.GetRoosterData(String.IsNullOrEmpty(searchString)?String.Empty:searchString);
+            IEnumerable<Les> rooster = Repository.GetRoosterData(String.IsNullOrEmpty(searchString)?String.Empty:searchString);
 
 
             switch (sortOrder)
@@ -64,7 +78,12 @@ namespace RoosterApp.Controllers
                     rooster = rooster.OrderBy(s => s.Vak);
                     break;
             }
-            return View(rooster.ToList());
+            int pageSize = 30;
+            int pageNumber = (page ?? 1);
+
+            var b = rooster.ToList();
+
+            return View(b.ToPagedList(pageNumber, pageSize));
         }
 
     }

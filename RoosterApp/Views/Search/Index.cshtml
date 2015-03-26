@@ -1,29 +1,33 @@
-﻿@model List<RoosterApp.Models.Les>
+﻿@model PagedList.IPagedList<RoosterApp.Models.Les>
+@using PagedList
+@using PagedList.Mvc;
+@using RoosterApp.Models;
 @{
     ViewBag.Title = "Index";
 }
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 <h2>SEARCH</h2>
 <table style="width: 100%" class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.ActionLink("Vak", "Index", new { sortOrder = ViewBag.VakSortParm })
+                @Html.ActionLink("Vak", "Index", new { sortOrder = ViewBag.VakSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Klas", "Index", new { sortOrder = ViewBag.DocentSortParm })
+                @Html.ActionLink("Klas", "Index", new { sortOrder = ViewBag.DocentSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Docent", "Index", new { sortOrder = ViewBag.DocentSortParm })
+                @Html.ActionLink("Docent", "Index", new { sortOrder = ViewBag.DocentSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Lokaal", "Index", new { sortOrder = ViewBag.LokaalSortParm })
+                @Html.ActionLink("Lokaal", "Index", new { sortOrder = ViewBag.LokaalSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Aanvang", "Index", new { sortOrder = ViewBag.AanvangSortParm })
+                @Html.ActionLink("Aanvang", "Index", new { sortOrder = ViewBag.AanvangSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
             <th>
-                @Html.ActionLink("Duur", "Index", new { sortOrder = ViewBag.DuurSortParm })
+                @Html.ActionLink("Duur", "Index", new { sortOrder = ViewBag.DuurSortParm, currentFilter = ViewBag.CurrentFilter })
             </th>
         </tr>
     </thead>
@@ -41,3 +45,6 @@
         }
     </tbody>
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

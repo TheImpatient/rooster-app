@@ -14,7 +14,7 @@ namespace RoosterApp
 
     public class MvcApplication : System.Web.HttpApplication
     {
-        protected void Application_Start()
+        public void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
 
