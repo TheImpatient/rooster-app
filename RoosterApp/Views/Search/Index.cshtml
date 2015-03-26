@@ -1,0 +1,43 @@
+﻿@model List<RoosterApp.Models.Les>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>SEARCH</h2>
+<table style="width: 100%" class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.ActionLink("Vak", "Index", new { sortOrder = ViewBag.VakSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Klas", "Index", new { sortOrder = ViewBag.DocentSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Docent", "Index", new { sortOrder = ViewBag.DocentSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Lokaal", "Index", new { sortOrder = ViewBag.LokaalSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Aanvang", "Index", new { sortOrder = ViewBag.AanvangSortParm })
+            </th>
+            <th>
+                @Html.ActionLink("Duur", "Index", new { sortOrder = ViewBag.DuurSortParm })
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Vak</td>
+                <td>@item.Klas</td>
+                <td>@item.Docent</td>
+                <td>@item.Lokaal</td>
+                <td>@item.StartTijd.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.Lengte</td>
+            </tr>
+        }
+    </tbody>
+</table>

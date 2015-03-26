@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Serialization;
@@ -72,6 +73,62 @@ namespace RoosterApp.Models
                     item.Timestamp = (DateTime) reader.GetValue(0);
 
                     list.Add(item);
+                }
+            }
+            catch (MySqlException err)
+            {
+                Console.WriteLine("Error: " + err.ToString());
+            }
+            finally
+            {
+                if (reader != null)
+                {
+                    reader.Close();
+                }
+                if (connection != null)
+                {
+                    connection.Close();
+                }
+            }
+            return list;
+        }
+
+        public static IEnumerable<Les> GetRoosterData(string searchQuery="")
+        {
+            const string connectionString = @"Server=195.8.208.128;Port=3351;Database=rooster;Uid=app;Pwd=&O6zWYLUEIg9lNhxXdzy;";
+            MySqlConnection connection = null;
+            MySqlDataReader reader = null;
+            var list = new List<Les>();
+            var jss = new JavaScriptSerializer();
+
+            string query = string.Format("SELECT * FROM les WHERE start_tijd > '{0}';", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
+            if (!String.IsNullOrEmpty(searchQuery))
+            {
+                query = string.Format("SELECT * FROM les WHERE start_tijd > '{0}' AND docent = '{1}' OR vak = '{1}' OR vak_code = '{1}' OR lokaal = '{1}' OR klas = '{1}';", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"), searchQuery);
+            }
+
+            try
+            {
+                connection = new MySqlConnection(connectionString);
+                connection.Open();
+               
+                var sqlCommand = new MySqlCommand(query, connection);
+                reader = sqlCommand.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int vakid;
+                    list.Add(new Les()
+                    {
+                        Docent = String.IsNullOrEmpty((string)reader.GetValue(1)) ? "" : (string)reader.GetValue(1),
+                        Klas = String.IsNullOrEmpty((string)reader.GetValue(8)) ? "" : (string)reader.GetValue(8),
+                        Lengte = (TimeSpan)reader.GetValue(6),
+                        StartTijd = (DateTime)reader.GetValue(5),
+                        Lokaal = String.IsNullOrEmpty((string)reader.GetValue(7)) ? "" : (string)reader.GetValue(7),
+                        Vak = String.IsNullOrEmpty((string)reader.GetValue(2)) ? "" : (string)reader.GetValue(2),
+                        VakCode = String.IsNullOrEmpty((string)reader.GetValue(3)) ? "" : (string)reader.GetValue(3),
+                        VakId = int.TryParse(reader.GetValue(4).ToString(), out vakid) ? 0 : vakid
+                    });
                 }
             }
             catch (MySqlException err)
