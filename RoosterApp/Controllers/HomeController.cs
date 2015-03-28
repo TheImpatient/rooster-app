@@ -6,6 +6,8 @@ using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using AgendaLibrary;
+using Microsoft.Ajax.Utilities;
 using RoosterApp.Models;
 using System.Web.Helpers;
 
@@ -18,6 +20,13 @@ namespace RoosterApp.Controllers
 
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public ActionResult About()
+        {
+            var Agenda = new Agenda();
+            Agenda.AddEvent();
             return View();
         }
 

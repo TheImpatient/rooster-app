@@ -104,7 +104,7 @@ namespace RoosterApp.Models
             string query = string.Format("SELECT * FROM les WHERE start_tijd > '{0}';", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
             if (!String.IsNullOrEmpty(searchQuery))
             {
-                query = string.Format("SELECT * FROM les WHERE start_tijd > '{0}' AND docent = '{1}' OR vak = '{1}' OR vak_code = '{1}' OR lokaal = '{1}' OR klas = '{1}';", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"), searchQuery);
+                query = string.Format("SELECT * FROM les WHERE start_tijd > '{0}' AND docent LIKE '%{1}%' OR vak LIKE '%{1}%' OR vak_code LIKE '%{1}%' OR lokaal LIKE '%{1}%' OR klas LIKE '%{1}%';", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"), searchQuery);
             }
 
             try

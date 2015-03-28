@@ -34,7 +34,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr data-clickable=true data-vak="@item.Vak" data-klas="@item.Klas" data-docent="@item.Docent" data-lokaal="@item.Lokaal" data-starttijd="@item.StartTijd.ToString("yyyy-MM-dd HH:mm:ss")" data-lengte="@item.Lengte" data-vakid="@item.VakId" data-vakcode="@item.VakCode">
                 <td>@item.Vak</td>
                 <td>@item.Klas</td>
                 <td>@item.Docent</td>
@@ -48,3 +48,60 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+<!-- Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Les</h4>
+            </div>
+            <div class="modal-body">
+                <table style="width: 100%">
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Vak</td>
+                        <td id="vakInfo" style="width: 25%"></td>
+                        <td style="width: 20%;font-weight: bold">Lokaal</td>
+                        <td id="lokaalInfo" style="width: 25%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Docent</td>
+                        <td id="docentInfo" style="width: 25%"></td>
+                        <td style="width: 20%;font-weight: bold">Klas</td>
+                        <td id="klasInfo" style="width: 25%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 20%;font-weight: bold">Aanvang</td>
+                        <td id="aanvangInfo" style="width: 25%"></td>
+                        <td style="width: 20%;font-weight: bold">Duur</td>
+                        <td id="duurInfo" style="width: 25%"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Add to Google calendar</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">More Info</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#SearchString").val("@(ViewBag.CurrentFilter as string)");
+
+    $('.table > tbody > tr').click(function (e) {
+        if (e.currentTarget.dataset.clickable == "true") {
+            $("#vakInfo").text(e.currentTarget.dataset.vak);
+            $("#lokaalInfo").text(e.currentTarget.dataset.lokaal);
+            $("#docentInfo").text(e.currentTarget.dataset.docent);
+            $("#klasInfo").text(e.currentTarget.dataset.klas);
+            $("#aanvangInfo").text(e.currentTarget.dataset.starttijd);
+            $("#duurInfo").text(e.currentTarget.dataset.lengte);
+
+            $('#infoModal').modal({
+                show: true
+            });
+        }
+    });
+</script>
