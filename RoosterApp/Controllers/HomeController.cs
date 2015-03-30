@@ -25,8 +25,8 @@ namespace RoosterApp.Controllers
 
         public ActionResult About()
         {
-            var Agenda = new Agenda();
-            Agenda.AddEvent();
+            //var Agenda = new Agenda();
+            //Agenda.AddEvent();
             return View();
         }
 
@@ -35,8 +35,24 @@ namespace RoosterApp.Controllers
             StatusImg img = Repository.GetStatusImgData();
             List<StatusLog> logs = Repository.GetStatusLogData();
 
+            if (img != null)
+            {
+                if (img.Timestamp.CompareTo(DateTime.Now.AddSeconds(-10)) == 1)
+                {
+                    img.Url = "../../images/heartbeat_green2.png";
+                }
+                else
+                {
+                    img.Url = "../../images/heartbeat_red2.png";
+                }
+            }
+            else
+            {
+                img.Url = "../../images/heartbeat2.png";
+            }
+
             ViewBag.RoostersPerUur = logs.Count(x => x.Timestamp > DateTime.Now.AddHours(-1));
-            ViewBag.ErrorGauge = logs.Count(x => x.Timestamp > DateTime.Now.AddDays(-1) && x.Completed == false);
+            ViewBag.ErrorGauge = logs.Count(x => x.Completed == false);
             ViewBag.CrawlTijdGauge = (int)logs.Average(x => x.Duration);
             ViewBag.StatusImg = img;
             ViewBag.StatusLog = logs;
@@ -85,7 +101,7 @@ namespace RoosterApp.Controllers
         {
             List<StatusLog> list = Repository.GetStatusLogData();
 
-            return list.Count(x => x.Timestamp > DateTime.Now.AddDays(-1) && x.Completed == false);
+            return list.Count(x => x.Completed == false);
         }
 
         public int RoosterGaugeResult()

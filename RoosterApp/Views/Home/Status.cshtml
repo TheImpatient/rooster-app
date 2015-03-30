@@ -1,12 +1,25 @@
-﻿@{
+﻿@using System.Activities.Expressions
+@using System.Activities.Statements
+@using RoosterApp.Models
+@{
     ViewBag.Title = "Status";
-    RoosterApp.Models.StatusImg statusImg = ViewBag.StatusImg;
-    statusImg.Url = "../../images/heartbeat2.png";
+    StatusImg statusImg = ViewBag.StatusImg;
         
-    List<RoosterApp.Models.StatusLog> statusLog = ViewBag.StatusLog;
+    List<StatusLog> statusLog = ViewBag.StatusLog;
     int errorGaugeValue = ViewBag.ErrorGauge;
     int roostersPerUur = ViewBag.RoostersPerUur;
     int crawlTijdGaugeValue = ViewBag.CrawlTijdGauge;
+
+    string errorPanel = "panel-success";
+
+    if (statusLog.Count(x => x.Completed == false) > 0 && statusLog.Count(x => x.Completed == false) < 5)
+    {
+        errorPanel = "panel-warning";
+    }
+    if (statusLog.Count(x => x.Completed == false) >= 5)
+    {
+        errorPanel = "panel-danger";
+    }
 }
 <table style="width: 100%; margin-bottom: 30px" >
     <tr>
@@ -32,41 +45,44 @@
     </tr>
 </table>
 
-<div class="list-card">
-    <h3 style="margin-top: 0px;margin-bottom: 20px">History<img style="margin-left: 20px;" id="statusHistoryLoader" src="../../Images/ajax-loader.gif" /></h3>
-    <table class="table table-hover" id="historyTable">
-        <thead>
-            <tr>
-                <th>Task</th>
-                <th>Timestamp</th>
-                <th>Klas</th>
-                <th>Week</th>
-                <th>Completed</th>
-            </tr>
-        </thead>
-        <tbody id="statusHistoryContainer">
-            @Html.Partial("_StatusHistoryPartial", statusLog.OrderByDescending(x=>x.Timestamp).Take(10).ToList())
-        </tbody>
-    </table>
-
+<div class="panel panel-primary">
+    <div class="panel-heading">History<img style="margin-left: 20px;" id="statusHistoryLoader" src="../../Images/ajax-loader.gif" /></div>
+    <div class="panel-body">
+        <table class="table table-hover" id="historyTable">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Timestamp</th>
+                    <th>Klas</th>
+                    <th>Week</th>
+                    <th>Completed</th>
+                </tr>
+            </thead>
+            <tbody id="statusHistoryContainer">
+                @Html.Partial("_StatusHistoryPartial", statusLog.OrderByDescending(x => x.Timestamp).Take(10).ToList())
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="list-card">
-    <h3 style="margin-top: 0px;margin-bottom: 20px">Errors<img style="margin-left: 20px;" id="statusErrorLoader" src="../../Images/ajax-loader.gif" /></h3>
-    <table class="table table-hover" id="errorTable">
-        <thead>
-            <tr>
-                <th>Task</th>
-                <th>Timestamp</th>
-                <th>Klas</th>
-                <th>Week</th>
-                <th>Error</th>
-            </tr>
-        </thead>
-        <tbody id="statusErrorsContainer">
-            @Html.Partial("_StatusErrorsPartial", statusLog.Where(x=>x.Completed==false).ToList())
-        </tbody>
-    </table>   
+<div class="panel @errorPanel">
+    <div class="panel-heading">Errors<img style="margin-left: 20px;" id="statusErrorLoader" src="../../Images/ajax-loader.gif" /></div>
+    <div class="panel-body">
+        <table class="table table-hover" id="errorTable">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Timestamp</th>
+                    <th>Klas</th>
+                    <th>Week</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody id="statusErrorsContainer">
+                @Html.Partial("_StatusErrorsPartial", statusLog.Where(x => x.Completed == false).ToList())
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Modal -->
