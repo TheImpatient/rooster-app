@@ -7,7 +7,7 @@
 }
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-<h2>SEARCH</h2>
+<h2>ZOEKEN</h2>
 <table style="width: 100%" class="table table-hover">
     <thead>
         <tr>
@@ -34,7 +34,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr data-clickable=true data-vak="@item.Vak" data-klas="@item.Klas" data-docent="@item.Docent" data-lokaal="@item.Lokaal" data-starttijd="@item.StartTijd.ToString("yyyy-MM-dd HH:mm:ss")" data-lengte="@item.Lengte" data-vakid="@item.VakId" data-vakcode="@item.VakCode">
+            <tr data-clickable=true data-vak="@item.Vak" data-klas="@item.Klas" data-docent="@item.Docent" data-lokaal="@item.Lokaal" data-starttijd="@item.StartTijd.ToString("yyyy-MM-dd HH:mm:ss")" data-lengte="@item.Lengte" data-vakid="@item.VakId" data-vakcode="@item.VakCode" data-hash="@item.GetHashCode()">
                 <td>@item.Vak</td>
                 <td>@item.Klas</td>
                 <td>@item.Docent</td>
@@ -79,9 +79,9 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Add to Google calendar</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">More Info</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a type="button" href="#" class="btn btn-primary">Toevoegen aan agenda</a>
+                <a type="button" href="@Url.Action("MoreInfo","Search")" class="btn btn-info" id="btn-more-info">Details</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Sluiten</button>
             </div>
         </div>
     </div>
@@ -99,9 +99,13 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
             $("#aanvangInfo").text(e.currentTarget.dataset.starttijd);
             $("#duurInfo").text(e.currentTarget.dataset.lengte);
 
+            $("#btn-more-info").attr("href",'@Url.Action("MoreInfo","Search")?id='+e.currentTarget.dataset.hash);
+
             $('#infoModal').modal({
                 show: true
             });
         }
     });
+
+    
 </script>

@@ -11,6 +11,8 @@ namespace RoosterApp.Models
 {
     public class Repository
     {
+        private static List<Les> _rooster; 
+
         public static StatusImg GetStatusImgData()
         {
             const string connectionString = @"Server=195.8.208.128;Port=3351;Database=rooster;Uid=app;Pwd=&O6zWYLUEIg9lNhxXdzy;";
@@ -146,7 +148,19 @@ namespace RoosterApp.Models
                     connection.Close();
                 }
             }
+
+            _rooster = list.ToList();
             return list;
+        }
+
+        public static List<Les> GetRooster()
+        {
+            if (_rooster == null)
+            {
+                _rooster = new List<Les>();
+            }
+
+            return _rooster;
         }
     }
 }

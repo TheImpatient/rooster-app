@@ -190,6 +190,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Views\Search\MoreInfo.cshtml" />
     <Resource Include="client_secret_177600524325-le2ar5m4qoffvdadptka06gkpc92eht6.apps.googleusercontent.com.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

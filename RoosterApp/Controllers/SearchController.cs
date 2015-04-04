@@ -38,7 +38,6 @@ namespace RoosterApp.Controllers
             //todo get rooster data once, look for solution in datamining project
             IEnumerable<Les> rooster = Repository.GetRoosterData(String.IsNullOrEmpty(searchString)?String.Empty:searchString);
 
-
             switch (sortOrder)
             {
                 case "vak_desc":
@@ -84,6 +83,16 @@ namespace RoosterApp.Controllers
             var b = rooster.ToList();
 
             return View(b.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult MoreInfo(string id)
+        {
+            List<Les> rooster = Repository.GetRooster();
+
+            Les les = rooster.FirstOrDefault(x => x.GetHashCode().Equals(int.Parse(id)));
+
+            ViewBag.Recurring = rooster.Where(x => x.VakCode == les.VakCode && x.Klas == les.Klas).ToList();
+            return View(les);
         }
 
     }
