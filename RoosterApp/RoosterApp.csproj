@@ -191,9 +191,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Views\Search\MoreInfo.cshtml" />
-    <Resource Include="client_secret_177600524325-le2ar5m4qoffvdadptka06gkpc92eht6.apps.googleusercontent.com.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Content Include="client_secret.json" />
     <None Include="Properties\PublishProfiles\deploy dev.pubxml" />
     <None Include="Properties\PublishProfiles\deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
@@ -267,6 +265,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

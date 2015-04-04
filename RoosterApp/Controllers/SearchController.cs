@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AgendaLibrary;
 using PagedList;
 using RoosterApp.Models;
+using Les = RoosterApp.Models.Les;
 
 namespace RoosterApp.Controllers
 {
@@ -95,5 +97,27 @@ namespace RoosterApp.Controllers
             return View(les);
         }
 
+        public void UpdateEvent(string id)
+        {
+            //AgendaLibrary.Agenda a = new Agenda();
+            //List<Les> rooster = Repository.GetRooster();
+
+            //Les les = rooster.FirstOrDefault(x => x.GetHashCode().Equals(int.Parse(id)));
+            //AgendaLibrary.Les l = new AgendaLibrary.Les()
+            //{
+            //    CalendarGuid = les.CalendarGuid,
+            //    Docent = les.Docent,
+            //    Klas = les.Klas,
+            //    Lengte = les.Lengte,
+            //    LesGuid = les.LesGuid,
+            //    Lokaal = les.Lokaal,
+            //    StartTijd = les.StartTijd,
+            //    Vak = les.Vak,
+            //    VakCode = les.VakCode,
+            //    VakId = les.VakId
+            //};
+            AgendaLibrary.Agenda a = new Agenda();
+            a.UpdateEvent(new AgendaLibrary.Les());
+        }
     }
 }

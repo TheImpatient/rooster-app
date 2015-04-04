@@ -129,7 +129,9 @@ namespace RoosterApp.Models
                         Lokaal = String.IsNullOrEmpty((string)reader.GetValue(7)) ? "" : (string)reader.GetValue(7),
                         Vak = String.IsNullOrEmpty((string)reader.GetValue(2)) ? "" : (string)reader.GetValue(2),
                         VakCode = String.IsNullOrEmpty((string)reader.GetValue(3)) ? "" : (string)reader.GetValue(3),
-                        VakId = int.TryParse(reader.GetValue(4).ToString(), out vakid) ? 0 : vakid
+                        VakId = int.TryParse(reader.GetValue(4).ToString(), out vakid) ? 0 : vakid,
+                        CalendarGuid = String.IsNullOrEmpty((string)reader.GetValue(9)) ? "" : (string)reader.GetValue(9),
+                        LesGuid = String.IsNullOrEmpty((string)reader.GetValue(10)) ? "" : (string)reader.GetValue(10)
                     });
                 }
             }

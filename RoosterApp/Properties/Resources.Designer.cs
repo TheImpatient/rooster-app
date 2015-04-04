@@ -59,16 +59,5 @@ namespace RoosterApp.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] client_secret_177600524325_le2ar5m4qoffvdadptka06gkpc92eht6_apps_googleusercontent_com {
-            get {
-                object obj = ResourceManager.GetObject("client_secret_177600524325_le2ar5m4qoffvdadptka06gkpc92eht6_apps_googleuserconten" +
-                        "t_com", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

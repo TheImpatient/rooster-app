@@ -15,5 +15,7 @@ namespace RoosterApp.Models
         public TimeSpan Lengte { get; set; }
         public DateTime StartTijd { get; set; }
         public string Klas { get; set; }
+        public string CalendarGuid { get; set; }
+        public string LesGuid { get; set; }
     }
 }
