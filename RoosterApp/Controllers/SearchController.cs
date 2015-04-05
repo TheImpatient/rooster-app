@@ -7,6 +7,8 @@ using AgendaLibrary;
 using PagedList;
 using RoosterApp.Models;
 using Les = RoosterApp.Models.Les;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
 
 namespace RoosterApp.Controllers
 {
@@ -87,37 +89,42 @@ namespace RoosterApp.Controllers
             return View(b.ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult MoreInfo(string id)
+        public ActionResult MoreInfo(string id,bool add = false)
         {
+            AgendaLibrary.Agenda a = new Agenda();
             List<Les> rooster = Repository.GetRooster();
-
             Les les = rooster.FirstOrDefault(x => x.GetHashCode().Equals(int.Parse(id)));
 
-            ViewBag.Recurring = rooster.Where(x => x.VakCode == les.VakCode && x.Klas == les.Klas).ToList();
+            if (add)
+            {
+                AgendaLibrary.Les l = new AgendaLibrary.Les()
+                {
+                    CalendarGuid = les.CalendarGuid,
+                    Docent = les.Docent,
+                    Klas = les.Klas,
+                    Lengte = les.Lengte,
+                    LesGuid = les.LesGuid,
+                    Lokaal = les.Lokaal,
+                    StartTijd = les.StartTijd,
+                    Vak = les.Vak,
+                    VakCode = les.VakCode,
+                    VakId = les.VakId
+                };
+                a.UpdateEvent(l);
+            }
+
+            var userAgenda = a.GetUserAgenda();
+
+            les.Attending = userAgenda.Items.Any(x => x.Id.Equals(les.CalendarGuid));
+
+            var recurring = rooster.Where(x => x.VakCode == les.VakCode && x.Klas == les.Klas).ToList();
+            foreach (var lese in recurring)
+            {
+                lese.Attending = userAgenda.Items.Any(x => x.Id.Equals(lese.CalendarGuid));
+            }
+            ViewBag.Recurring = recurring;
+
             return View(les);
-        }
-
-        public void UpdateEvent(string id)
-        {
-            //AgendaLibrary.Agenda a = new Agenda();
-            //List<Les> rooster = Repository.GetRooster();
-
-            //Les les = rooster.FirstOrDefault(x => x.GetHashCode().Equals(int.Parse(id)));
-            //AgendaLibrary.Les l = new AgendaLibrary.Les()
-            //{
-            //    CalendarGuid = les.CalendarGuid,
-            //    Docent = les.Docent,
-            //    Klas = les.Klas,
-            //    Lengte = les.Lengte,
-            //    LesGuid = les.LesGuid,
-            //    Lokaal = les.Lokaal,
-            //    StartTijd = les.StartTijd,
-            //    Vak = les.Vak,
-            //    VakCode = les.VakCode,
-            //    VakId = les.VakId
-            //};
-            AgendaLibrary.Agenda a = new Agenda();
-            a.UpdateEvent(new AgendaLibrary.Les());
         }
     }
 }

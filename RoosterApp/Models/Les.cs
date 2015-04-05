@@ -17,5 +17,6 @@ namespace RoosterApp.Models
         public string Klas { get; set; }
         public string CalendarGuid { get; set; }
         public string LesGuid { get; set; }
+        public bool Attending { get; set; }
     }
 }
